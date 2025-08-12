@@ -31,15 +31,15 @@ output "private_subnets" {
 
 output "elastic_ip" {
   description = "The IP address of this elastic ip"
-  value       = aws_eip.nat.public_ip
+  value       = aws_eip.nat[0].public_ip
 }
 
 output "internet_gateway" {
   description = "The ID of the created internet gateway"
-  value       = aws_internet_gateway.here.id
+  value       = aws_internet_gateway.here[0].id
 }
 
 output "nat_gateway" {
   description = "the ID of the vreated NAT gateway"
-  value       = aws_nat_gateway.here.id
+  value       = aws_nat_gateway.here[0].id
 }
