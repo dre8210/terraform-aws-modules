@@ -2,8 +2,10 @@ variable "vpc_config" {
   description = "VPC configuration options. cidr_block and name are required"
 
   type = object({
-    cidr_block = string
-    name       = string
+    cidr_block           = string
+    name                 = string
+    enable_dns_hostnames = optional(bool, true)
+    enable_dns_support   = optional(bool, true)
   })
 
   validation {
@@ -13,34 +15,39 @@ variable "vpc_config" {
   }
 }
 
-variable "subnet_config" {
+variable "public_subnet_config" {
   description = <<EOT
   Accepts a map of subnet configurations. Each subnet configuration requires a cidr_block, an az and an indication of public or private subnet(default= false).
   EOT
 
   type = map(object({
     cidr_block = string
-    public     = optional(bool, false)
     az         = string
   }))
 
   validation {
     condition = alltrue([
-      for config in values(var.subnet_config) : can(cidrnetmask(config.cidr_block))
+      for config in values(var.public_subnet_config) : can(cidrnetmask(config.cidr_block))
     ])
     error_message = "The cidr_block config must have a valid CIDR block"
   }
 }
 
-variable "enable_dns_hostnames" {
-  description = "Should be true to enable DNS hostnames in VPC"
-  type        = bool
-  default     = true
-}
+variable "private_subnet_config" {
+  description = <<EOT
+  Accepts a map of subnet configurations. Each subnet configuration requires a cidr_block, an az and an indication of public or private subnet(default= false).
+  EOT
 
-variable "enable_dns_support" {
-  description = "Should be true to enable DNS support in the VPC"
-  type        = bool
-  default     = true
+  type = map(object({
+    cidr_block = string
+    az         = string
+  }))
+
+  validation {
+    condition = alltrue([
+      for config in values(var.private_subnet_config) : can(cidrnetmask(config.cidr_block))
+    ])
+    error_message = "The cidr_block config must have a valid CIDR block"
+  }
+
 }
-  
