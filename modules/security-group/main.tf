@@ -29,6 +29,7 @@ resource "aws_security_group_rule" "public" {
   to_port     = each.value.to_port
   protocol    = each.value.protocol
   cidr_blocks = each.value.cidr_blocks
+  security_group_id = each.value.security_group_id.id
 
 }
 

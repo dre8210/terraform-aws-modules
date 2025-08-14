@@ -26,12 +26,13 @@ variable "security_group_config_public" {
   description = "Setup custom public security group rules"
 
   type = map(object({
-    type        = string
-    cidr_blocks = optional(list(string), null)
-    from_port   = number
-    to_port     = number
-    protocol    = string
-    description = string
+    type                     = string
+    cidr_blocks              = optional(list(string), null)
+    source_security_group_id = optional(string, null)
+    from_port                = number
+    to_port                  = number
+    protocol                 = string
+    description              = string
   }))
 
   validation {
