@@ -11,7 +11,7 @@ resource "aws_vpc" "here" {
   enable_dns_support   = var.vpc_config.enable_dns_support
 
   tags = {
-    name = var.vpc_config.name
+    Name = var.vpc_config.name
   }
 }
 
@@ -24,7 +24,7 @@ resource "aws_subnet" "public" {
   availability_zone = each.value.az
 
   tags = {
-    name = "${each.key}-public"
+    Name = "${each.key}-public"
   }
 
   lifecycle {
@@ -49,7 +49,7 @@ resource "aws_subnet" "private" {
   availability_zone = each.value.az
 
   tags = {
-    name = "${each.key}-private"
+    Name = "${each.key}-private"
   }
 
   lifecycle {
@@ -75,6 +75,10 @@ resource "aws_internet_gateway" "here" {
 resource "aws_route_table" "public" {
   count  = length(aws_subnet.public) > 0 ? 1 : 0
   vpc_id = aws_vpc.here.id
+
+  tags = {
+    Name = "private-route-table"
+  }
 
   route {
     cidr_block = "0.0.0.0/0"

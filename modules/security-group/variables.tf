@@ -27,7 +27,7 @@ variable "security_group_config_public" {
 
   type = map(object({
     type        = string
-    cidr_blocks = list(string)
+    cidr_blocks = optional(list(string), null)
     from_port   = number
     to_port     = number
     protocol    = string
@@ -37,9 +37,11 @@ variable "security_group_config_public" {
   validation {
     condition = alltrue([
       for rule in values(var.security_group_config_public) :
-      alltrue([for cidr in rule.cidr_blocks : can(cidrnetmask(cidr))])
+      rule.cidr_blocks == null || alltrue([
+        for cidr in rule.cidr_blocks : can(cidrnetmask(cidr))
+      ])
     ])
-    error_message = "All CIDRs must be valid."
+    error_message = "All CIDRs must be valid if provided."
   }
 }
 
@@ -49,7 +51,7 @@ variable "security_group_config_private" {
 
   type = map(object({
     type        = string
-    cidr_blocks = list(string)
+    cidr_blocks = optional(list(string), null)
     from_port   = number
     to_port     = number
     protocol    = string
