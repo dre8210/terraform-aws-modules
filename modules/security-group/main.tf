@@ -28,7 +28,7 @@ resource "aws_security_group_rule" "public" {
   from_port                = each.value.from_port
   to_port                  = each.value.to_port
   protocol                 = each.value.protocol
-  cidr_blocks              = each.value.cidr_blocks
+  cidr_blocks              = each.value.source_security_group_id == null ? each.value.cidr_blocks : null
   source_security_group_id = each.value.source_security_group_id
 
 }
@@ -52,9 +52,10 @@ resource "aws_security_group_rule" "private" {
   security_group_id = aws_security_group.private.id
 
 
-  type        = each.value.type
-  from_port   = each.value.from_port
-  to_port     = each.value.to_port
-  protocol    = each.value.protocol
-  cidr_blocks = each.value.cidr_blocks
+  type                     = each.value.type
+  from_port                = each.value.from_port
+  to_port                  = each.value.to_port
+  protocol                 = each.value.protocol
+  cidr_blocks              = each.value.source_security_group_id == null ? each.value.cidr_blocks : null
+  source_security_group_id = each.value.source_security_group_id
 }
