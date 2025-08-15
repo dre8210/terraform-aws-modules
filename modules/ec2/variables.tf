@@ -7,7 +7,7 @@ variable "instance_config" {
     vpc_security_group_ids  = list(string)
     subnet_id               = string
     key_name                = optional(string)
-    user_data               = optional
+    user_data               = optional(string, null)
     monitoring              = optional(bool, false)
     ebs_optimized           = optional(bool, false)
     disable_api_termination = optional(bool, false)
