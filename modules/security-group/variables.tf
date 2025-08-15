@@ -38,7 +38,7 @@ variable "security_group_config_public" {
   validation {
     condition = alltrue([
       for rule in values(var.security_group_config_public) :
-      rule.cidr_blocks == null || alltrue([
+      length(rule.cidr_blocks) == 0 || alltrue([
         for cidr in rule.cidr_blocks : can(cidrnetmask(cidr))
       ])
     ])
