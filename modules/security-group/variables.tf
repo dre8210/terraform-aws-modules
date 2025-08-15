@@ -35,15 +35,6 @@ variable "security_group_config_public" {
     description              = string
   }))
 
-  validation {
-    condition = alltrue([
-      for rule in values(var.security_group_config_public) :
-      length(rule.cidr_blocks) == 0 || alltrue([
-        for cidr in rule.cidr_blocks : can(cidrnetmask(cidr))
-      ])
-    ])
-    error_message = "All CIDRs must be valid if provided."
-  }
 }
 
 variable "security_group_config_private" {
@@ -62,15 +53,6 @@ variable "security_group_config_private" {
   }))
 
   default = {}
-
-  validation {
-    condition = alltrue([
-      for rule in values(var.security_group_config_public) :
-      length(rule.cidr_blocks) == 0 || alltrue([
-        for cidr in rule.cidr_blocks : can(cidrnetmask(cidr))
-      ])
-    ])
-    error_message = "All CIDRs must be valid if provided."
-  }
 }
+
 
