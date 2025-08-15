@@ -27,8 +27,8 @@ variable "security_group_config_public" {
 
   type = map(object({
     type                     = string
-    cidr_blocks              = optional(list(string), null)
-    source_security_group_id = optional(string, null)
+    cidr_blocks              = optional(list(string), [])
+    source_security_group_id = optional(string, "")
     from_port                = number
     to_port                  = number
     protocol                 = string
